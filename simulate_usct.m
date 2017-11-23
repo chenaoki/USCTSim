@@ -1,14 +1,18 @@
-function simulate_usct(param, dst_path)
+function simulate_usct(param, medium, dst_path)
 
     if ~exist(dst_path, 'dir')
         mkdir(dst_path);
     end
-    save([dst_path, '\param'], 'param')
+    save([dst_path, '\param'], 'param');
+    save([dst_path, '\medium'], 'medium');
+    fid = fopen([dst_path, '\param.json'], 'w');
+    fprintf(fid, jsonencode(param));
+    fclose(fid);
     
     % Create grid with time array
     kgrid = makeGrid(param.grid.Nx, param.grid.dx, param.grid.Ny, param.grid.dy);
     dt1=1/param.sensor.freq;
-    [ta2,dt2] = makeTime(kgrid, param.medium.sound_speed, [], param.t_end);
+    [ta2,dt2] = makeTime(kgrid, medium.sound_speed, [], param.t_end);
     if dt2<dt1         % select higher sampling rate
         kgrid.dt = dt2;
         kgrid.t_array=ta2;
@@ -31,7 +35,7 @@ function simulate_usct(param, dst_path)
 
     % Source loop
     num_step = length(param.source.point_map);
-    rfdata=zeros(length(kgrid.t_array), param.ringarray.num_points, num_step); 
+    rfdata=zeros(length(kgrid.t_array), param.ringarray.num_points, num_step);
     for step=1:num_step
         
         disp(['Step ',num2str(step),'/',num2str(num_step)])
@@ -61,7 +65,7 @@ function simulate_usct(param, dst_path)
             'PlotScale',[-0.1 0.1]
         };
         sensor_data = (kspaceFirstOrder2D(...
-            kgrid, param.medium, source, sensor,...
+            kgrid, medium, source, sensor,...
             input_args{:}...
         )).';
         rfdata(:,:,step)=gather(sensor_data.p).';

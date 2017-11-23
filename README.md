@@ -10,7 +10,7 @@ MATLAB simulation program for USCT using [k-Wave](http://www.k-wave.org/, "k-Wav
 
 ## How to use
 
-### 1. Load sample parameter
+### 1. Load sample parameters
 
 ```matlab
 >> load('sample_param.mat')
@@ -22,6 +22,17 @@ MATLAB simulation program for USCT using [k-Wave](http://www.k-wave.org/, "k-Wav
         t_end: 1.0000e-04
        sensor: [1×1 struct]
        source: [1×1 struct]
+
+>> load('sample_medium.mat')
+>> medium
+
+medium =
+
+    sound_speed: [1024×1024 double]
+    alpha_coeff: 1
+    alpha_power: 1.5000
+        density: [1024×1024 double]
+
 ```
 
 ### 2. Edit paramters
