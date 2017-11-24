@@ -4,10 +4,12 @@ function simulate_usct(param, medium, dst_path)
         mkdir(dst_path);
     end
     save([dst_path, '\param'], 'param');
-    save([dst_path, '\medium'], 'medium');
-    fid = fopen([dst_path, '\param.json'], 'w');
-    fprintf(fid, jsonencode(param));
-    fclose(fid);
+    save([dst_path, '\medium'], 'medium', '-v7.3');
+    if exist('jsonencode', 'builtin')
+        fid = fopen([dst_path, '\param.json'], 'w');
+        fprintf(fid, jsonencode(param));
+        fclose(fid);
+    end
     
     % Create grid with time array
     kgrid = makeGrid(param.grid.Nx, param.grid.dx, param.grid.Ny, param.grid.dy);
