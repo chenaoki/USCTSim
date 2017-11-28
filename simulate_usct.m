@@ -14,14 +14,13 @@ function simulate_usct(param, medium, dst_path)
     % Create grid with time array
     kgrid = makeGrid(param.grid.Nx, param.grid.dx, param.grid.Ny, param.grid.dy);
     dt1=1/param.sensor.freq;
-    [ta2,dt2] = makeTime(kgrid, medium.sound_speed, [], param.t_end);
-    if dt2<dt1         % select higher sampling rate
-        kgrid.dt = dt2;
-        kgrid.t_array=ta2;
-    else
-        kgrid.dt = dt1;
-        kgrid.t_array=0:dt1:param.t_end;
+    [~,dt2] = makeTime(kgrid, medium.sound_speed, [], param.t_end);
+    if dt2<dt1         % Check higher sampling rate
+        disp(["Error. Sampling rate (", param.sensor.freq, ") must be higher than ", 1/dt2])
+        disp("Simulation aborted. ")
+        return;
     end
+    kgrid.t_array=0:dt1:param.t_end;
     save([dst_path,'\kgrid.mat'],'kgrid');
     
     % Define source wave form
