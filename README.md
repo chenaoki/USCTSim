@@ -13,7 +13,7 @@ MATLAB simulation program for USCT using [k-Wave](http://www.k-wave.org/, "k-Wav
 ### 1. Load sample parameters
 
 ```matlab
->> load('sample_param.mat')
+>> load('param_sample.mat')
 >> param
          grid: [1×1 struct]
        medium: [1×1 struct]
@@ -23,7 +23,7 @@ MATLAB simulation program for USCT using [k-Wave](http://www.k-wave.org/, "k-Wav
        sensor: [1×1 struct]
        source: [1×1 struct]
 
->> load('sample_medium.mat')
+>> load('medium_sample.mat')
 >> medium
 
 medium =
@@ -46,7 +46,7 @@ Below shows example of selecting source points.
 ### 3. Execute simulation
 
 ```matlab
->> simulate_usct(param, 'result')
+>> simulate_usct(param, medium, 'result')
 ```
 
 ### 4. check out results
