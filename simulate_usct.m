@@ -31,9 +31,12 @@ function simulate_usct(param, medium, dst_path)
     % Define sensors
     ringplace = makeCartCircle(param.ringarray.radius, param.ringarray.num_points);
     sensor.mask=ringplace;
-    [mask_points, ringpos2scanpos, ~]=cart2grid(kgrid, ringplace); % from xy coodinate to pixel index
     sensor.record = {'p'}; % define the acoustic parameters to record
     save([dst_path,'\sensor.mat'],'sensor');
+    
+    % cart -> grid conversion (from xy coodinate to pixel index)
+    [mask_points, ringpos2scanpos, ~]=cart2grid(kgrid, ringplace);
+    save([dst_path,'\mask_points.mat'],'mask_points');
 
     % Source loop
     num_step = length(param.source.point_map);
