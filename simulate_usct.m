@@ -22,11 +22,12 @@ function simulate_usct(param, medium, dst_path)
         kgrid.dt = dt1;
         kgrid.t_array=0:dt1:param.t_end;
     end
-    save([dst_path,'\kgrid.mat'],'kgrid');
+    str_kgrid = struct(kgrid);
+    save([dst_path,'\str_kgrid.mat'],'str_kgrid');
     
     % Define source wave form
     source_wave = create_waveform( param.source.waveform, kgrid.t_array, kgrid.dt);
-    save([dst_path,'\sourse_wave.mat'],'source_wave');
+    save([dst_path,'\source_wave.mat'],'source_wave');
     
     % Define sensors
     ringplace = makeCartCircle(param.ringarray.radius, param.ringarray.num_points);
