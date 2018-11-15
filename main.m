@@ -1,12 +1,15 @@
 sim_path = 'sim_016/';
 num_trial = 50;
 num_cycle = 10;
-r_max = 150;
-r_min = 50;
-c_max = 200;
+r_max = 10;
+r_min = 5;
+c_max = 10;
+c_min = 5;
 center = 512;
 base_md = 1000;
-base_ss = 1500;
+base_ss = 1540;
+muscle_ss = 1585;
+fat_ss = 1450;
 
 load('param_sample.mat');
 load('medium_sample.mat');
@@ -23,36 +26,74 @@ for trial = 1: num_trial
     ss(:,:) = mean(mean(medium.sound_speed));
     md(:,:) = mean(mean(medium.density));
     % random cycle: density map
-    for i = 1: num_cycle
-        r = randi([r_min r_max], 1, 1);
-        cx = randi([center-c_max, center + c_max], 1, 1);
-        cy = randi([center-c_max, center + c_max], 1, 1);
-        for dx = -r : r 
-            tmp = int16(sqrt(r*r - dx*dx));
-            for dy = -tmp : tmp
-                x = cx + dx;
-                y = cy + dy;
-                md(x, y) = md(x, y) + base_md * 0.2;
-            end
-        end
-    end
-    medium.density = md;
+    % for i = 1: num_cycle
+    %     r = randi([r_min r_max], 1, 1);
+    %     cx = randi([center-c_max, center + c_max], 1, 1);
+    %     cy = randi([center-c_max, center + c_max], 1, 1);
+    %     for dx = -r : r 
+    %         tmp = int16(sqrt(r*r - dx*dx));
+    %         for dy = -tmp : tmp
+    %             x = cx + dx;
+    %             y = cy + dy;
+    %             md(x, y) = md(x, y) + base_md * 0.2;
+    %         end
+    %     end
+    % end
+    % medium.density = md;
     
     % random cycle: sound speed map
-    for i = 1: num_cycle
-        r = randi([r_min r_max], 1, 1);
-        cx = randi([center-c_max, center + c_max], 1, 1);
-        cy = randi([center-c_max, center + c_max], 1, 1);
-        
+    % for i = 1: num_cycle
+    %     r = randi([r_min, r_max], 1, 1);
+    %     %cx = randi([center-c_max, center + c_max], 1, 1);
+    %     %cy = randi([center-c_max, center + c_max], 1, 1);
+    %     cr = randi([c_min, c_max], 1, 1);
+    %     cth = rand([-pi, pi], 1, 1);
+    %     cx = cr * cos(cth)
+    %     cy = cr * sin(cth)
+
+    %     for dx = -r : r 
+    %         tmp = int16(sqrt(r*r - dx*dx));
+    %         for dy = -tmp : tmp
+    %             x = cx + dx;
+    %             y = cy + dy;
+    %             ss(x, y) = ss(x, y) + base_ss * 0.2;
+    %         end
+    %     end
+    % end
+
+    % fat
+    for i = 1: 2
+        r = randi([r_min, r_max], 1, 1);
+        cr = randi([c_min, c_max], 1, 1);
+        cth = rand([-pi, pi], 1, 1);
+        cx = cr * cos(cth)
+        cy = cr * sin(cth)
         for dx = -r : r 
             tmp = int16(sqrt(r*r - dx*dx));
             for dy = -tmp : tmp
                 x = cx + dx;
                 y = cy + dy;
-                ss(x, y) = ss(x, y) + base_ss * 0.2;
+                ss(x, y) = fat_ss;
             end
         end
-    end
+    
+    % muscle
+    for i = 1: 2
+        r = randi([r_min, r_max], 1, 1);
+        cr = randi([c_min, c_max], 1, 1);
+        cth = rand([-pi, pi], 1, 1);
+        cx = cr * cos(cth)
+        cy = cr * sin(cth)
+        for dx = -r : r 
+            tmp = int16(sqrt(r*r - dx*dx));
+            for dy = -tmp : tmp
+                x = cx + dx;
+                y = cy + dy;
+                ss(x, y) = muscle_ss;
+            end
+        end
+
+
     medium.sound_speed = ss;
 %     % visualization
 %     figure;
