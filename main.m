@@ -8,6 +8,7 @@ c_min = 5;
 center = 512;
 base_md = 1000;
 base_ss = 1540;
+water_ss = 1540;
 muscle_ss = 1585;
 fat_ss = 1450;
 
@@ -15,7 +16,7 @@ load('param_sample.mat');
 load('medium_sample.mat');
 
 % turn off movie record
-param.io.save_movie = 0;
+param.io.save_movie = false;
 
 for trial = 1: num_trial
     trial_name = strcat('trial_', num2str(trial, '%03d'));
@@ -23,8 +24,11 @@ for trial = 1: num_trial
     trial_path = strcat(trial_path, '/');
     param.source.point_map = 1: 16 : 256;
     
-    ss(:,:) = mean(mean(medium.sound_speed));
-    md(:,:) = mean(mean(medium.density));
+    md = medium.density;
+    ss = medium.sound_speed;
+    md(:,:) = base_md;
+    ss(:,:) = base_ss;
+    
     % random cycle: density map
     % for i = 1: num_cycle
     %     r = randi([r_min r_max], 1, 1);
@@ -65,7 +69,7 @@ for trial = 1: num_trial
     for i = 1: 2
         r = randi([r_min, r_max], 1, 1);
         cr = randi([c_min, c_max], 1, 1);
-        cth = rand([-pi, pi], 1, 1);
+        cth = pi * rand([-1, 1], 1, 1);
         cx = cr * cos(cth)
         cy = cr * sin(cth)
         for dx = -r : r 
@@ -81,7 +85,7 @@ for trial = 1: num_trial
     for i = 1: 2
         r = randi([r_min, r_max], 1, 1);
         cr = randi([c_min, c_max], 1, 1);
-        cth = rand([-pi, pi], 1, 1);
+        cth = pi * rand([-1, 1], 1, 1);
         cx = cr * cos(cth)
         cy = cr * sin(cth)
         for dx = -r : r 
